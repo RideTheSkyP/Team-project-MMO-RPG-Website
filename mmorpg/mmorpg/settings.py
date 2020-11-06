@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -7,7 +8,7 @@ SECRET_KEY = "ethge$%(-+s*)tmb_v%0537&@g^uq67ehrqdgay392i_386bwt"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 # Application definition
 
@@ -53,7 +54,9 @@ WSGI_APPLICATION = 'mmorpg.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.mysql",
-        'NAME': BASE_DIR / 'db.mysql',
+        'OPTIONS': {
+            'read_default_file': '/etc/mysql/my.cnf',
+        },
     }
 }
 
@@ -74,7 +77,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Vienna'
 
 USE_I18N = True
 
@@ -83,3 +86,4 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
