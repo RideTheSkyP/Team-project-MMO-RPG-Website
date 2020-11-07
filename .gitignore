@@ -1,3 +1,6 @@
-
 .idea/
 mmorpg/mmorpg/__pycache__/
+mmorpg/login/__pycache__/
+mmorpg/mainpage/__pycache__/
+mmorpg/register/__pycache__/
+*.pyc

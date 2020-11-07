@@ -4,6 +4,7 @@ import os
 import sys
 
 
+# run with python3 manage.py runserver 127.0.0.1:8000
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mmorpg.settings')
