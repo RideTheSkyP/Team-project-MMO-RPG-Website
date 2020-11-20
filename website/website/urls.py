@@ -1,4 +1,4 @@
-"""mmorpg URL Configuration
+"""website URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -14,13 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+import django.contrib.auth.views as authViews
 from django.urls import path, include
-from django.contrib.auth import views
 
 urlpatterns = [
-    # path("", include("mainpage.urls")),
     path("admin/", admin.site.urls),
-    path("login/", views.auth_login, {"template_name": "login.html"}, name="login"),
-    path("logout/", views.auth_logout, {"next_page": "login"}, name="logout"),
-    path("register/", include("register.urls")),
+    path("home/", include("core.urls")),
+    path("signup/", include("core.urls")),
+    path("login/", authViews.auth_login, name="login"),
+    path("logout/", authViews.auth_logout, name="logout"),
 ]
