@@ -123,6 +123,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = Path(BASE_DIR / "static")
 
-LOGIN_URL = "signup"
-LOGOUT_URL = "signup"
-LOGIN_REDIRECT_URL = "home"
+LOGIN_URL = "base"
+LOGOUT_URL = "base"
+LOGIN_REDIRECT_URL = "base"
