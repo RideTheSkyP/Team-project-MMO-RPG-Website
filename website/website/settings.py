@@ -25,7 +25,7 @@ SECRET_KEY = 'vuf^((8b!z)_u%i@ax_knhs#8smghr9*4ptnu+!0p#^mn^g3@z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django',
+    "social_django",
+    "core"
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -108,9 +111,21 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+SOCIAL_AUTH_FACEBOOK_KEY = "687122902007160"        # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = "3ad8030601f2d5baf3c474bc566171ef"  # App Secret
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+SOCIAL_AUTH_FACEBOOK_SCOPE = ["email", "user_link"]
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+  "fields": "id, name, email, picture.type(large), link"
+}
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
+    ("name", "name"),
+    ("email", "email"),
+    ("picture", "picture"),
+    ("link", "profile_url"),
+]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
+# SECURE_SSL_REDIRECT = True
 
 LANGUAGE_CODE = 'en-us'
 
