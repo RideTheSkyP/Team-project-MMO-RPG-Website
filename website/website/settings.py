@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "social_django",
-    "core"
+    "core",
+    "sslserver",
 ]
 
 MIDDLEWARE = [
@@ -111,8 +112,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-SOCIAL_AUTH_FACEBOOK_KEY = "687122902007160"        # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = "3ad8030601f2d5baf3c474bc566171ef"  # App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = "687122902007160"
+SOCIAL_AUTH_FACEBOOK_SECRET = "3ad8030601f2d5baf3c474bc566171ef"
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_FACEBOOK_SCOPE = ["email", "user_link"]
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
@@ -125,7 +126,7 @@ SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
     ("link", "profile_url"),
 ]
 
-# SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 
 LANGUAGE_CODE = 'en-us'
 

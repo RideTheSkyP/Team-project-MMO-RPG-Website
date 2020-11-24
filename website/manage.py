@@ -3,6 +3,8 @@
 import os
 import sys
 
+# run with python3 manage.py runsslserver 8080
+
 
 def main():
     """Run administrative tasks."""
