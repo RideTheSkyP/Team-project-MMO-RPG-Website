@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from core.databaseConnection import Database
 
 
 def startPage(request):
@@ -40,8 +41,10 @@ def signup(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=raw_password)
+            password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=password)
+            db = Database()
+            db.addUser(username, password)
             login(request, user)
             return redirect("home")
     else:

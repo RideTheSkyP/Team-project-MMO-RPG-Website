@@ -20,11 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("core.urls"), name="start"),
-    path("home/", include("core.urls"), name="home"),
-    path("", include("core.urls"), name="signup"),
-    path("", include("core.urls"), name="login"),
-    path("", include("core.urls"), name="logout"),
+    path("", include("core.urls")),
     # path("", authViews.LogoutView.as_view(), name="logout"),
     path("social-auth/", include("social_django.urls", namespace="social")),
 ]
