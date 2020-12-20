@@ -1,11 +1,14 @@
 import mysql.connector
 
 config = {
-  "user": "sql2379354",
-  "password": "vE2*dN8!",
-  "host": "sql2.freemysqlhosting.net",
-  "database": "sql2379354",
-  "raise_on_warnings": True
+    "user": "user",
+    "password": "password",
+    "host": "34.107.65.104",
+    "database": "pz",
+    "raise_on_warnings": True,
+    'ssl_ca': '/home/push/Downloads/server-ca_4.pem',
+    'ssl_key': '/home/push/Downloads/client-key_2.pem',
+    'ssl_cert': '/home/push/Downloads/client-cert_2.pem'
 }
 
 
@@ -21,3 +24,12 @@ class Database:
         self.db.commit()
         print(f"User {login} added")
         self.db.close()
+
+    def checkConnection(self):
+        mycursor = self.db.cursor()
+        mycursor.execute("SELECT * FROM user_details")
+        myresult = mycursor.fetchall()
+        print(myresult)
+
+
+Database().checkConnection()
