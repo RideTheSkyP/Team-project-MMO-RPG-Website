@@ -36,7 +36,8 @@ def logoutFromAcc(request):
 
 
 def statistics(request):
-    print(request)
+    # print(request)
+    return render(request, "statistics.html")
 
 
 def signup(request):
