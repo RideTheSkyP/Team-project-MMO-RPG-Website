@@ -1,8 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>statystyka</h2>
 
+<form action="" method="post">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Submit">
+</form>
+
+
+
+
+  <h2>statystyka</h2>
+  <table style="width:100%">
+    <tr>
+      <th>player id</th>
+      <th>Nick </th>
+      <th>wygrane </th> 
+      <th>procent wygranych </th>
+      <th>srednia punktów </th>
+      <th>wklad w druzyne </th>
+    </tr>
+    {% for row in stats %}
+    <tr>
+      <td>{{row.1}}</td>
+      <td>{{row.2}}</td> 
+      <td>{{row.3}}</td>
+      <td>{{row.4}}</td>
+      <td>{{row.5}}</td>
+      <td>{{row.6}}</td>
+    </tr>
+    {% endfor %}}
+  </table>
   
   
 {% endblock %}

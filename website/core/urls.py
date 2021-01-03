@@ -8,4 +8,5 @@ urlpatterns = [
     path("logout/", views.logoutFromAcc, name="logout"),
     path("signup/", views.signup, name="signup"),
     path("statistics/", views.statistics, name="statistics"),
+    path("statistics/<str:player_nick>", views.player_stats, name="player_stats"),
 ]
