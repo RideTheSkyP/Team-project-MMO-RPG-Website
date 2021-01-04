@@ -2,14 +2,18 @@
 
 {% block content %}
   <h2>statystyka gracza</h2>
-  
+  <h4>nick szukany</h4>
   {{nick}}
   <br>
+  <h4>dane z bazy</h4>
   {{stats.1}}<br>
   {{stats.2}}<br>
   {{stats.3}}<br>
   {{stats.4}}<br>
   {{stats.5}}<br>
   {{stats.6}}<br>
+
+  <h4>fav vehicle</h4>
+  {{fav_vehicle.0}}
   
 {% endblock %}

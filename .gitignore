@@ -5,3 +5,4 @@ mmorpg/mainpage/__pycache__/
 mmorpg/register/__pycache__/
 *.pyc
 *.old
+*/.DS_Store

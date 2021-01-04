@@ -43,14 +43,15 @@ class NameForm(forms.Form):
 def statistics(request):
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM top_players order by games_won desc")
+        cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
+        avg_points, contribution FROM top_players order by games_won desc LIMIT 10""")
         rows = cursor.fetchall()
 
 
     if request.method == 'POST':
         form = NameForm(request.POST)
         if form.is_valid():
-            return redirect(str("home" + form.cleaned_data['your_name']))
+            return redirect(str("/statistics/" + form.cleaned_data['your_name'] + "/"))
     else:
         form = NameForm()
 
@@ -61,10 +62,31 @@ def player_stats(request, player_nick):
 
     with connection.cursor() as cursor:
         # cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
-        cursor.execute("SELECT * FROM top_players WHERE Nick like %s", [player_nick])
-        rows = cursor.fetchone()
+        try:
+            cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
+                avg_points, contribution FROM top_players WHERE Nick = %s""", [player_nick])
+            rows = cursor.fetchone()
+            # print(rows[0])
 
-    return render(request, "player_stats.html", {"nick": player_nick, "stats": rows})
+        except Exception:
+            print("ups")
+            return redirect("home") 
+
+        fav_vehicle = ""
+
+        try:
+            cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_game \
+                WHERE player_id like %s \
+                GROUP BY vehicle \
+                ORDER BY magnitude DESC LIMIT 1""", [rows[0]])
+            fav_vehicle = cursor.fetchone()
+
+        except Exception:
+            print("ups")
+
+    print(fav_vehicle)
+
+    return render(request, "player_stats.html", {"nick": player_nick, "stats": rows, "fav_vehicle": fav_vehicle})
 
 
 def signup(request):

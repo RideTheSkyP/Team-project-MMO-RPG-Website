@@ -2,19 +2,16 @@
 
 {% block content %}
 
-<form action="" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <input type="submit" value="Submit">
-</form>
-
-
-
-
+  <form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+  </form>
+  <br>
   <h2>statystyka</h2>
-  <table style="width:100%">
+  <table style="width:50%">
     <tr>
-      <th>player id</th>
+      <!-- <th>player id</th> -->
       <th>Nick </th>
       <th>wygrane </th> 
       <th>procent wygranych </th>
@@ -23,6 +20,7 @@
     </tr>
     {% for row in stats %}
     <tr>
+      <!-- <td>{{row.0}}</td> -->
       <td>{{row.1}}</td>
       <td>{{row.2}}</td> 
       <td>{{row.3}}</td>
