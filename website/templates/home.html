@@ -2,4 +2,31 @@
 
 {% block content %}
   <h2>Welcome, {{ user.username }}!</h2>
+
+
+
+  <!-- staty - ostatnie 10 gier -->
+
+  <h4>{{ user.username }} - twoje ostatnie 10 gier:</h4>
+  <table style="width:50%">
+    <tr>
+      <th>(twój) player id</th> <th>zdobyte punkty </th> <th>twoja druzyna </th> 
+      <th>punkty druzyny </th> <th>mapa </th> <th>Wygrales? </th>
+    </tr>
+    {% for row in stats %}
+    <tr>
+      <td>{{row.0}}</td> <td>{{row.1}}</td> <td>{{row.2}}</td> <td>{{row.3}}</td> <td>{{row.4}}</td>
+      <td>
+        {% if row.5 == 1 %}
+          WYGRALES
+        {% else %}
+          :c
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}}
+  </table>
+
+  <!-- koniec statystyk -->
+
 {% endblock %}

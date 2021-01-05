@@ -14,7 +14,20 @@ def startPage(request):
 
 @login_required()
 def home(request):
-    return render(request, "home.html")
+
+    with connection.cursor() as cursor:
+
+        rows = ""
+        try:
+            cursor.execute("""SELECT player_id, player_points, team, \
+                team_points, map, won, id FROM stat_player_gameA \
+                WHERE id = %s order by id desc limit 10""", [request.user.id])
+            rows = cursor.fetchall()
+
+        except Exception as e:
+            print(e)
+
+    return render(request, "home.html", {"stats": rows})
 
 
 def loginToAcc(request):
@@ -38,14 +51,18 @@ def logoutFromAcc(request):
 
 
 class NameForm(forms.Form):
-    your_name = forms.CharField(label='Your name', max_length=100)
+    your_name = forms.CharField(label='Statystiki gracza:', max_length=100)
 
 def statistics(request):
 
     with connection.cursor() as cursor:
-        cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
-        avg_points, contribution FROM top_players order by games_won desc LIMIT 10""")
-        rows = cursor.fetchall()
+        rows = ""
+        try:
+            cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
+            avg_points, contribution FROM top_playersA order by games_won desc LIMIT 10""")
+            rows = cursor.fetchall()
+        except Exception as e:
+            print(e)
 
 
     if request.method == 'POST':
@@ -61,28 +78,27 @@ def statistics(request):
 def player_stats(request, player_nick):
 
     with connection.cursor() as cursor:
-        # cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+        rows = ""
         try:
             cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
-                avg_points, contribution FROM top_players WHERE Nick = %s""", [player_nick])
+                avg_points, contribution FROM top_playersA WHERE Nick = %s""", [player_nick])
             rows = cursor.fetchone()
             # print(rows[0])
 
-        except Exception:
-            print("ups")
-            return redirect("home") 
+        except Exception as e:
+            print(e)
+            # return redirect("statistics") 
 
         fav_vehicle = ""
-
         try:
-            cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_game \
+            cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_gameA \
                 WHERE player_id like %s \
                 GROUP BY vehicle \
                 ORDER BY magnitude DESC LIMIT 1""", [rows[0]])
             fav_vehicle = cursor.fetchone()
 
-        except Exception:
-            print("ups")
+        except Exception as e:
+            print(e)
 
     print(fav_vehicle)
 
