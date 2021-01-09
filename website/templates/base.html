@@ -14,9 +14,9 @@
         <header>
             <h1>My Site</h1>
             {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">logout</a> / <a href="{% url 'statistics' %}">statistics</a>
+                <a href="{% url 'home' %}">Home</a> / <a href="{% url 'logout' %}">Logout</a> / <a href="{% url 'statistics' %}">Statistics</a> / <a href="{% url 'changePassword' %}">Change Password</a>
             {% else %}
-                <a href="{% url 'login' %}">login</a> / <a href="{% url 'signup' %}">signup</a>
+                <a href="{% url 'login' %}">Login</a> / <a href="{% url 'signup' %}">Signup</a>
             {% endif %}
             <hr>
         </header>

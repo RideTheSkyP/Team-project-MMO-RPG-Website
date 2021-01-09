@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
-  <h2>Welcome, {{ user.username }}!</h2>
-
-
-
+    <h2>Welcome, {{ user.username }}!</h2>
+        {% if additionalInfo %}
+            <p style="color: lawngreen">{{ additionalInfo }}</p>
+        {% endif %}
   <!-- staty - ostatnie 10 gier -->
   <!-- strona: róbcie z tym co chcecie, wrzuciłem to na zasadzie że ładnie może wyglądać -->
 

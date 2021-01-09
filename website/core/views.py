@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import connection
@@ -87,7 +87,7 @@ def statistics(request):
         except Exception as e:
             print(e)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = NameForm(request.POST)
         if form.is_valid():
             return redirect(str("/statistics/" + form.cleaned_data['your_name'] + "/"))
@@ -145,3 +145,16 @@ def top_players_all(request):
             print(e)
 
     return JsonResponse({"works?": "error"})
+
+
+@login_required()
+def changePassword(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return render(request, "home.html", {"additionalInfo": "Password changed successfully"})
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "changePassword.html", {"form": form})
