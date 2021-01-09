@@ -86,10 +86,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "website.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-
 if os.getenv("GAE_APPLICATION", None):
     # Running on production App Engine, so connect to Google Cloud SQL using
     # the unix socket at /cloudsql/<your-cloudsql-connection string>
@@ -124,7 +120,7 @@ if os.getenv("TRAMPOLINE_CI", None):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3")
+            "NAME": Path(BASE_DIR / "db.sqlite3")
         }
     }
 
@@ -187,3 +183,6 @@ LOGIN_URL = "base"
 LOGOUT_URL = "base"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = Path(BASE_DIR / "sentEmails")

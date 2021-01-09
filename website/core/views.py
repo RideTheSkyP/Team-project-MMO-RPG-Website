@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import connection
 from django import forms
 from .forms import SignUpForm
@@ -36,6 +36,7 @@ def home(request):
     return render(request, "home.html", passed_data)
 
 
+@user_passes_test(lambda u: u.is_anonymous, login_url="home")
 def loginToAcc(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
@@ -56,6 +57,7 @@ def logoutFromAcc(request):
     return redirect("start")
 
 
+@user_passes_test(lambda u: u.is_anonymous, login_url="home")
 def signup(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
