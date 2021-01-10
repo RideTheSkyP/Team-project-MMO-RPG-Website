@@ -15,11 +15,9 @@ def startPage(request):
 
 @login_required()
 def home(request):
+    # todo add global statistics overview
 
-    # statystyki
-    # strona: róbcie z tym co chcecie, wrzuciłem to na zasadzie że ładnie może wyglądać
     with connection.cursor() as cursor:
-
         rows = ""
         try:
             cursor.execute("""SELECT player_id, player_points, team, team_points, map, won, id FROM stat_player_game \
@@ -29,11 +27,7 @@ def home(request):
         except Exception as e:
             print(e)
 
-    passed_data = {
-        "stats": rows
-    }
-
-    return render(request, "home.html", passed_data)
+    return render(request, "home.html", {"stats": rows})
 
 
 @user_passes_test(lambda u: u.is_anonymous, login_url="home")
