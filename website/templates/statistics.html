@@ -71,16 +71,15 @@
     <script>
         function toggleVisibility(id)
         {
-            var element = document.getElementById(id)
-            var oppositeElements = ["myStatsTable", "bestPlayersTable", "findPlayerForm"];
+            const element = document.getElementById(id);
+            const oppositeElements = ["myStatsTable", "bestPlayersTable", "findPlayerForm"];
             const index = oppositeElements.indexOf(id)
 
             if (index > -1)
             {
                 oppositeElements.splice(index, 1)
-                console.log(oppositeElements)
             }
-            {#console.log(element.style.display)#}
+
             if (element.style.display === "none")
             {
                 for(const oppElem in oppositeElements)

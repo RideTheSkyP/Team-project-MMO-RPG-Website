@@ -1,11 +1,11 @@
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db import connection
 from django import forms
 from .forms import SignUpForm
+from .databaseInteraction import DatabaseInteraction
 import json
 
 
@@ -15,18 +15,8 @@ def startPage(request):
 
 @login_required()
 def home(request):
-    # todo add global statistics overview
-
-    with connection.cursor() as cursor:
-        rows = ""
-        try:
-            cursor.execute("""SELECT player_id, player_points, team, team_points, map, won, id FROM stat_player_game \
-                WHERE id = %s order by id desc limit 10""", [request.user.id])
-            rows = cursor.fetchall()
-
-        except Exception as e:
-            print(e)
-
+    # todo add global statistics overview (must be like a dashboard)
+    rows = DatabaseInteraction().homePage(request.user.id)
     return render(request, "home.html", {"stats": rows})
 
 
@@ -68,18 +58,12 @@ def signup(request):
 
 
 class NameForm(forms.Form):
-    your_name = forms.CharField(label='Statystiki gracza:', max_length=100)
+    your_name = forms.CharField(label="Player stats", max_length=100)
 
 
 def statistics(request):
-    with connection.cursor() as cursor:
-        rows = ""
-        try:
-            cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
-                avg_points, contribution FROM top_players order by games_won desc LIMIT 10""")
-            rows = cursor.fetchall()
-        except Exception as e:
-            print(e)
+
+    rows = DatabaseInteraction().statistics()
 
     if request.method == "POST":
         form = NameForm(request.POST)
@@ -88,37 +72,13 @@ def statistics(request):
     else:
         form = NameForm()
 
-    print(rows)
     return render(request, "statistics.html", {"stats": rows, "form": form})
 
 
-def player_stats(request, player_nick):
-    with connection.cursor() as cursor:
-        rows = ""
-        try:
-            cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
-                avg_points, contribution FROM top_players WHERE Nick = %s""", [player_nick])
-            rows = cursor.fetchone()
-            # print(rows[0])
-
-        except Exception as e:
-            print(e)
-            # return redirect("statistics")
-
-        fav_vehicle = ""
-        try:
-            cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_game \
-                WHERE player_id like %s \
-                GROUP BY vehicle \
-                ORDER BY magnitude DESC LIMIT 1""", [rows[0]])
-            fav_vehicle = cursor.fetchone()
-
-        except Exception as e:
-            print(e)
-
-    print(fav_vehicle)
-
-    return render(request, "player_stats.html", {"nick": player_nick, "stats": rows, "fav_vehicle": fav_vehicle})
+def player_stats(request, playerNick):
+    rows = DatabaseInteraction().getPlayerStats(playerNick)
+    favoriteVehicle = DatabaseInteraction().getFavoriteVehicle(rows[0])
+    return render(request, "player_stats.html", {"nick": playerNick, "stats": rows, "fav_vehicle": favoriteVehicle})
 
 
 def test(request):
@@ -126,19 +86,9 @@ def test(request):
 
 
 def top_players_all(request):
-    with connection.cursor() as cursor:
-        try:
-            cursor.execute("SELECT player_id, Nick, games_won, percent_won, avg_points, contribution FROM top_players")
-            r = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-            # print(r)
-            json_output = json.dumps(r)
-
-            return HttpResponse(json_output)
-
-        except Exception as e:
-            print(e)
-
-    return JsonResponse({"works?": "error"})
+    json_output = json.dumps(DatabaseInteraction().topPlayersOverall())
+    return HttpResponse(json_output)
+    # return JsonResponse({"works?": "error"})
 
 
 @login_required()
