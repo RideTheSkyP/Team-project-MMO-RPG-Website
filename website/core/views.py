@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django import forms
-from .forms import SignUpForm
+from .forms import SignUpForm, NameForm
 from .databaseInteraction import DatabaseInteraction
 import json
 
@@ -57,28 +57,23 @@ def signup(request):
     return render(request, "signup.html", {"form": form})
 
 
-class NameForm(forms.Form):
-    your_name = forms.CharField(label="Player stats", max_length=100)
-
-
 def statistics(request):
-
     rows = DatabaseInteraction().statistics()
-
     if request.method == "POST":
         form = NameForm(request.POST)
         if form.is_valid():
-            return redirect(str("/statistics/" + form.cleaned_data['your_name'] + "/"))
+            rows = DatabaseInteraction().getPlayerStats(form.cleaned_data['playerNickname'])
+
+            return render(request, "statistics.html", {"stats": rows})
     else:
         form = NameForm()
-
     return render(request, "statistics.html", {"stats": rows, "form": form})
 
 
-def player_stats(request, playerNick):
-    rows = DatabaseInteraction().getPlayerStats(playerNick)
-    favoriteVehicle = DatabaseInteraction().getFavoriteVehicle(rows[0])
-    return render(request, "player_stats.html", {"nick": playerNick, "stats": rows, "fav_vehicle": favoriteVehicle})
+# def player_stats(request, playerNick):
+#     rows = DatabaseInteraction().getPlayerStats(playerNick)
+#     favoriteVehicle = DatabaseInteraction().getFavoriteVehicle(rows[0])
+#     return render(request, "player_stats.html", {"nick": playerNick, "stats": rows, "fav_vehicle": favoriteVehicle})
 
 
 def test(request):

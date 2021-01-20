@@ -25,7 +25,7 @@
     <body>
         <h2>Statistics</h2>
 
-        <a href="javascript:toggleVisibility('myStatsTable');">My stats</a> / <a href="javascript:toggleVisibility('bestPlayersTable');">Best players</a> / <a href="javascript:toggleVisibility('findPlayerForm');">Find player</a>
+        <a href="javascript:toggleVisibility('statsTable');">My stats</a> / <a href="javascript:toggleVisibility('bestPlayersTable');" onclick="top_players_all()" id="bestPlayers">Best players</a> / <a href="javascript:toggleVisibility('findPlayerForm');">Find player</a>
 
         <form action="" style="display: none" method="POST" id="findPlayerForm">
             {% csrf_token %}
@@ -33,63 +33,32 @@
             <input type="submit" value="Submit">
         </form>
 
-        <table style="display: block" id="myStatsTable">
-            <tr>
-                <th>Nickname</th>
-                <th>Games Won</th>
-                <th>Winning percentage</th>
-                <th>Average points</th>
-                <th>Team contribution</th>
-            </tr>
-            {% for row in stats %}
-            <tr>
-                {% for item in row %}
-                    <td> {{ item }}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </table>
-
-        <table style="display: none" id="bestPlayersTable">
-            <tr>
-                <th>Nickname</th>
-                <th>Games Won</th>
-                <th>Winning percentage</th>
-                <th>Average points</th>
-                <th>Team contribution</th>
-            </tr>
-            {% for row in stats %}
+        {% if stats %}
+            <table style="display: block" id="statsTable">
                 <tr>
-                {% for item in row %}
-                    <td> {{ item }}</td>
-                {% endfor %}
+                    <th>Player Id</th>
+                    <th>Username</th>
+                    <th>Games Won</th>
+                    <th>Percent Won</th>
+                    <th>Average points</th>
+                    <th>Team contribution</th>
                 </tr>
-            {% endfor %}
-        </table>
-    </body>
+                {% for row in stats %}
+                <tr>
+                    {% for item in row %}
+                        <td> {{ item }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
 
     <script>
         function toggleVisibility(id)
         {
             const element = document.getElementById(id);
-            const oppositeElements = ["myStatsTable", "bestPlayersTable", "findPlayerForm"];
-            const index = oppositeElements.indexOf(id)
-
-            if (index > -1)
-            {
-                oppositeElements.splice(index, 1)
-            }
-
             if (element.style.display === "none")
             {
-                for(const oppElem in oppositeElements)
-                {
-                    const elem = document.getElementById(oppositeElements[oppElem])
-                    if (elem.style.display !== "none")
-                    {
-                        elem.style.display = "none"
-                    }
-                }
                 element.style.display = "block";
             }
             else

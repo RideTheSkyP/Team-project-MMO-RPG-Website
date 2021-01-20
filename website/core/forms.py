@@ -14,3 +14,7 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2", )
+
+
+class NameForm(forms.Form):
+    playerNickname = forms.CharField(label="Player stats", max_length=100)
