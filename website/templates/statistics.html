@@ -53,6 +53,29 @@
             </table>
         {% endif %}
 
+        <br>
+
+        {% if maps %}
+            <table style="display: block" id="statsTable">
+                <tr>
+                    <th>Map</th>
+                    <th>Games played</th>
+                    <th>Average time</th>
+                    <th>Highest points</th>
+                    <th>Average points</th>
+                </tr>
+                {% for row in maps %}
+                <tr>
+                    <td>{{row.0}}</td>
+                    <td>{{row.1}}</td>
+                    <td>{{row.2}}</td>
+                    <td>{{row.3}}</td>
+                    <td>{{row.4}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
     <script>
         function toggleVisibility(id)
         {

@@ -5,6 +5,6 @@ mmorpg/mainpage/__pycache__/
 mmorpg/register/__pycache__/
 *.pyc
 *.old
-*/.DS_Store
+.DS_Store
 website/templates/registration/.goutputstream-DUX7W0
 website/core/migrations/
