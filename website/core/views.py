@@ -19,7 +19,8 @@ def startPage(request):
 def home(request):
     # todo add global statistics overview (must be like a dashboard)
     rows = DatabaseInteraction().statsLastGames(request.user.id)
-    return render(request, "home.html", {"stats": rows})
+    mystats = DatabaseInteraction().getPlayerStats(request.user.username)
+    return render(request, "home.html", {"stats": rows, "mystats": mystats})
 
 
 @user_passes_test(lambda u: u.is_anonymous, login_url="home")
