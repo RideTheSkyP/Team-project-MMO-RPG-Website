@@ -66,15 +66,13 @@ def statistics(request):
     rows = DatabaseInteraction().statsTopPlayers()
 
     maps = DatabaseInteraction().statsTopMaps()
-
+    new_maps = ""
     for i, row in enumerate(maps):
-        print(row)
         temp_row = (row[0], row[1], datetime.combine(date.min, row[2]) - datetime.min, row[3], row[4])
         if i == 0:
             new_maps = temp_row
         else:
             new_maps = (new_maps,) + (temp_row,)
-
 
     if request.method == "POST":
         form = NameForm(request.POST)
@@ -115,11 +113,12 @@ def map_stats(request, the_map):
 
     km_pkt = float(tot_dist[1]) / rows[4]
 
-    return render(request, "map_stats.html", {"map": the_map, "stats": rows, "avg_time": avg_time, \
-        "tot_dist": tot_dist, "km_pkt": km_pkt})
+    return render(request, "map_stats.html", {"map": the_map, "stats": rows, "avg_time": avg_time, "tot_dist": tot_dist, "km_pkt": km_pkt})
+
 
 def test(request):
     return JsonResponse({'works?': 'yes'})
+
 
 """
 koniec statystyk
