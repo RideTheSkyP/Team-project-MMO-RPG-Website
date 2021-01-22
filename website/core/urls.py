@@ -10,4 +10,5 @@ urlpatterns = [
     path("changePassword/", views.changePassword, name='changePassword'),
     path("statistics/", views.statistics, name="statistics"),
     path("statistics/<str:player_nick>/", views.player_stats, name="player_stats"),
+    path("statistics/maps/<str:the_map>/", views.map_stats, name="map_stats"),
 ]

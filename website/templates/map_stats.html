@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>statystyka mapy</h2>
+  <h4>mapa szukana</h4>
+  {{map}}
+  <br>
+  <h4>dane z bazy</h4>
+  nazwa:            {{stats.0}}<br>
+  ilosc gier:       {{stats.1}}<br>
+  sredni czas gry:  {{avg_time}}<br>
+  max punkty:       {{stats.3}}<br>
+  srednie punkty:   {{stats.4}}<br>
+<br>
+<h5>laczny dystans</h5>
+{{tot_dist.1}}<br>
+<h5>km/punkt</h5>
+{{km_pkt}}
+
+
+
+
+  
+{% endblock %}

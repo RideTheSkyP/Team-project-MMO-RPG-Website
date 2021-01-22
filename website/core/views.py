@@ -59,12 +59,13 @@ def signup(request):
     return render(request, "signup.html", {"form": form})
 
 
+"""
+statystyki
+"""
 def statistics(request):
     rows = DatabaseInteraction().statsTopPlayers()
 
     maps = DatabaseInteraction().statsTopMaps()
-
-
 
     for i, row in enumerate(maps):
         print(row)
@@ -87,51 +88,47 @@ def statistics(request):
         form = NameForm()
     return render(request, "statistics.html", {"stats": rows, "form": form, "maps": new_maps})
 
+
 def player_stats(request, player_nick):
 
     rows = DatabaseInteraction().getPlayerStats(player_nick)
 
-    fav_vehicle = DatabaseInteraction().getFavoriteVehicle(rows[0])
+    fav_vehicle = ""
+    fav_map = ""
 
-    # with connection.cursor() as cursor:
-    #     rows = ""
-    #     try:
-    #         cursor.execute("""SELECT player_id, Nick, games_won, percent_won, \
-    #             avg_points, contribution FROM top_players WHERE Nick = %s""", [player_nick])
-    #         rows = cursor.fetchone()
-    #         # print(rows[0])
+    try:
+        fav_vehicle = DatabaseInteraction().getFavoriteVehicle(rows[0])
+        fav_map = DatabaseInteraction().getFavoriteMap(rows[0])
+    except Exception:
+        pass
 
-    #     except Exception as e:
-    #         print(e)
-    #         # return redirect("statistics") 
-
-    #     fav_vehicle = ""
-    #     try:
-    #         cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_game \
-    #             WHERE player_id like %s \
-    #             GROUP BY vehicle \
-    #             ORDER BY magnitude DESC LIMIT 1""", [rows[0]])
-    #         fav_vehicle = cursor.fetchone()
-
-    #     except Exception as e:
-    #         print(e)
-
-    print(fav_vehicle)
-
-    return render(request, "player_stats.html", {"nick": player_nick, "stats": rows, "fav_vehicle": fav_vehicle})
+    return render(request, "player_stats.html", {"nick": player_nick, "stats": rows, "fav_vehicle": fav_vehicle, "fav_map": fav_map})
 
 
+def map_stats(request, the_map):
 
-# def player_stats(request, playerNick):
-#     rows = DatabaseInteraction().getPlayerStats(playerNick)
-#     favoriteVehicle = DatabaseInteraction().getFavoriteVehicle(rows[0])
-#     return render(request, "player_stats.html", {"nick": playerNick, "stats": rows, "fav_vehicle": favoriteVehicle})
+    rows = DatabaseInteraction().getMapStats(the_map)
+        
+    avg_time = datetime.combine(date.min, rows[2]) - datetime.min
+    
+    tot_dist = DatabaseInteraction().getMapTotalDistance(the_map)
 
+    km_pkt = float(tot_dist[1]) / rows[4]
+
+    return render(request, "map_stats.html", {"map": the_map, "stats": rows, "avg_time": avg_time, \
+        "tot_dist": tot_dist, "km_pkt": km_pkt})
 
 def test(request):
     return JsonResponse({'works?': 'yes'})
 
+"""
+koniec statystyk
+"""
 
+
+""" 
+API 
+"""
 def top_players_all(request):
 
     with connection.cursor() as cursor:
@@ -167,6 +164,10 @@ def top_maps(request):
             print(e)
 
     return JsonResponse({"works?": "error"})
+
+"""
+koniec API
+"""
 
 
 @login_required()

@@ -57,6 +57,38 @@ class DatabaseInteraction:
 		except Exception as exc:
 			print(f"Favorite vehicle databaseInt exception: {exc}")
 
+	# uwaga: uwzywa map w stat_player_game
+	def getFavoriteMap(self, playerId):
+		try:
+			self.cursor.execute("""SELECT map, count(map) AS magnitude FROM stat_player_game \
+                WHERE player_id like %s \
+                GROUP BY map \
+                ORDER BY magnitude DESC LIMIT 1""", [playerId])
+			return self.cursor.fetchone()
+		except Exception as exc:
+			print(f"Favorite vehicle databaseInt exception: {exc}")
+
+
+	def getMapStats(self, the_map):
+		try:
+			self.cursor.execute("""SELECT map, no_of_games, avg_time, max_points_team, \
+            avg_points FROM top_map WHERE map = %s""", [the_map])
+			return self.cursor.fetchone()
+		except Exception as exc:
+			print(f"Favorite vehicle databaseInt exception: {exc}")
+
+
+	def getMapTotalDistance(self, the_map):
+		try:
+			self.cursor.execute("""select m.map, sum(p.distance) from stat_player_game as p \
+                join stat_map_game as m on p.game_id = m.game_id \
+                WHERE m.map = %s \
+                group by m.map """, [the_map])
+			return self.cursor.fetchone()
+		except Exception as exc:
+			print(f"Favorite vehicle databaseInt exception: {exc}")
+
+
 	# nieuzywany
 	def JSONtopPlayersOverall(self):
 		try:
