@@ -18,9 +18,9 @@ def startPage(request):
 @login_required()
 def home(request):
     # todo add global statistics overview (must be like a dashboard)
-    rows = DatabaseInteraction().statsLastGames(request.user.id)
-    mystats = DatabaseInteraction().getPlayerStats(request.user.username)
-    return render(request, "home.html", {"stats": rows, "mystats": mystats})
+    # rows = DatabaseInteraction().statsLastGames(request.user.id)
+    # mystats = DatabaseInteraction().getPlayerStats(request.user.username)
+    return render(request, "home.html", {})
 
 
 @user_passes_test(lambda u: u.is_anonymous, login_url="home")
@@ -68,6 +68,12 @@ def statistics(request):
 
     maps = DatabaseInteraction().statsTopMaps()
 
+    last_games = ""
+
+    if request.user.id is not None:
+        last_games = DatabaseInteraction().statsLastGames(request.user.id)
+
+
     for i, row in enumerate(maps):
         print(row)
         temp_row = (row[0], row[1], datetime.combine(date.min, row[2]) - datetime.min, row[3], row[4])
@@ -87,7 +93,8 @@ def statistics(request):
             # return render(request, "statistics.html", {"stats": rows})
     else:
         form = NameForm()
-    return render(request, "statistics.html", {"stats": rows, "form": form, "maps": new_maps})
+
+    return render(request, "statistics.html", {"stats": rows, "form": form, "maps": new_maps, "last_games": last_games})
 
 
 def player_stats(request, player_nick):
