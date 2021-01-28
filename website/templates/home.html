@@ -5,36 +5,6 @@
         {% if additionalInfo %}
             <p style="color: lawngreen">{{ additionalInfo }}</p>
         {% endif %}
-  <!-- staty - ostatnie 10 gier -->
-  <!-- strona: róbcie z tym co chcecie, wrzuciłem to na zasadzie że ładnie może wyglądać -->
 
-  <h4>{{ user.username }} - twoje ostatnie 10 gier:</h4>
-  <table style="width:50%">
-    <tr>
-      <th>(twój) player id</th> <th>zdobyte punkty </th> <th>twoja druzyna </th> 
-      <th>punkty druzyny </th> <th>mapa </th> <th>Wygrales? </th>
-    </tr>
-    {% for row in stats %}
-    <tr>
-      <td>{{row.0}}</td> <td>{{row.1}}</td> <td>{{row.2}}</td> <td>{{row.3}}</td> <td>{{row.4}}</td>
-      <td>
-        {% if row.5 == 1 %}
-          WYGRALES
-        {% else %}
-          :c
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}}
-  </table>
-  <br>
-
-  Username: {{mystats.1}}<br>
-  Games Won: {{mystats.2}}<br>
-  Percent Won: {{mystats.3}}<br>
-  Average points: {{mystats.4}}<br>
-  Team contribution: {{mystats.5}}<br>
-
-  <!-- koniec statystyk -->
 
 {% endblock %}

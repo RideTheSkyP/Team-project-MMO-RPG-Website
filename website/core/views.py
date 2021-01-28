@@ -18,9 +18,9 @@ def startPage(request):
 @login_required()
 def home(request):
     # todo add global statistics overview (must be like a dashboard)
-    rows = DatabaseInteraction().statsLastGames(request.user.id)
-    mystats = DatabaseInteraction().getPlayerStats(request.user.username)
-    return render(request, "home.html", {"stats": rows, "mystats": mystats})
+    # rows = DatabaseInteraction().statsLastGames(request.user.id)
+    # mystats = DatabaseInteraction().getPlayerStats(request.user.username)
+    return render(request, "home.html", {})
 
 
 @user_passes_test(lambda u: u.is_anonymous, login_url="home")
@@ -67,7 +67,15 @@ def statistics(request):
     rows = DatabaseInteraction().statsTopPlayers()
 
     maps = DatabaseInteraction().statsTopMaps()
+    
     new_maps = ""
+
+    last_games = ""
+
+    if request.user.id is not None:
+        last_games = DatabaseInteraction().statsLastGames(request.user.id)
+
+
     for i, row in enumerate(maps):
         temp_row = (row[0], row[1], datetime.combine(date.min, row[2]) - datetime.min, row[3], row[4])
         if i == 0:
@@ -85,7 +93,8 @@ def statistics(request):
             # return render(request, "statistics.html", {"stats": rows})
     else:
         form = NameForm()
-    return render(request, "statistics.html", {"stats": rows, "form": form, "maps": new_maps})
+
+    return render(request, "statistics.html", {"stats": rows, "form": form, "maps": new_maps, "last_games": last_games})
 
 
 def player_stats(request, player_nick):
@@ -153,6 +162,25 @@ def top_maps(request):
             # TODO ogarnąć avg_time
             cursor.execute("""SELECT map, no_of_games, max_points_team, \
             	avg_points FROM top_map order by no_of_games desc LIMIT 100""")
+
+            r = [dict((cursor.description[i][0], value) \
+               for i, value in enumerate(row)) for row in cursor.fetchall()]
+
+            json_output = json.dumps(r)
+            return HttpResponse(json_output)
+
+        except Exception as e:
+            print(e)
+
+    return JsonResponse({"works?": "error"})
+
+def api_player(request, player_name):
+    with connection.cursor() as cursor:
+        try:
+
+            cursor.execute("""SELECT t.nick, s.player_id, s.game_id, s.player_points, s.team, s.vehicle, s.distance,  
+            	s.team_points, s.map, s.won FROM stat_player_game as s JOIN top_players as t 
+                on s.player_id = t.player_id where t.nick = %s""", [player_name])
 
             r = [dict((cursor.description[i][0], value) \
                for i, value in enumerate(row)) for row in cursor.fetchall()]
