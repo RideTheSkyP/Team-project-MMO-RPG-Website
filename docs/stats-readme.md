@@ -1,24 +1,47 @@
 # Dokumentacja - Statystyki
 
+**Znajduje się tutaj opis działu statystyk na stronie oraz bazie danych w tym projekcie**
+
+----------
+
+  - [Aby uruchomić wyśwtelanie statystyk na stronie:](#aby-uruchomić-wyśwtelanie-statystyk-na-stronie)
+  - [Wersje oprogramowania:](#wersje-oprogramowania)
+  - [Obsługa API](#obsługa-api)
+      - [Dostępne zapytania:](#dostępne-zapytania)
+    - [Format zwracanych danych](#format-zwracanych-danych)
+  - [Baza danych](#baza-danych)
+  - [Populacja bazy danych](#populacja-bazy-danych)
+  - [Struktura funkcji, plików oraz routing `Django`](#struktura-funkcji-plików-oraz-routing-django)
+    - [Pliki istotne dla statystyk](#pliki-istotne-dla-statystyk)
+    - [Opis strony](#opis-strony)
+    - [Opis API](#opis-api)
+
 Aby uruchomić wyśwtelanie statystyk na stronie:
 ----------
 
-    - inicjalizacja strony wg instrukcji (w tym `python3 manage.py migrate`) 
+    - inicjalizacja strony wg instrukcji w dokumentacji strony (w tym `python3 manage.py migrate`), w tym połączenie z bazą MySQL
+
     - uruchomienie skryptu baza_staty.sql w wybranej bazie MySQL (w pierwszych linkjkach trzeba zmienic wybraną bazę)
+    
     - standardowe uruchomienie za pomocą `python3 manage.py runsslserver [port]`
 
-Obsługa API:
+Wersje oprogramowania:
+--------
+- [Python 3.9.1](https://www.python.org/downloads/)
+- [Django 3.1.4](https://docs.djangoproject.com/en/3.1/intro/install/)
+
+Obsługa API
 --------
 
 API posiada własny link `[strona]/api/[zapytanie]`, wszystko jest zwracane w formacie JSON
 
-Dostępne zapytania:
-- `test` - zwraca czy API działa
+#### Dostępne zapytania:
+- `test` - do testowania czy API działa
 - `top_players_all` - zwraca całą tabelę `top_players` z przetworzonymi danymi
 - `top_maps` - zwraca statystyki map
 - `player/[player]` - zwraca wszystskie gry danego gracza
 
-### format danych
+### Format zwracanych danych
 `test`:
 
     {
@@ -96,11 +119,11 @@ Struktura funkcji, plików oraz routing `Django`
       - [...]
     - [manage.py](../website/manage.py) - skrypt inicjujący włączenie serwera
 
-### Opis dla strony
+### Opis strony
 
 Bazowe przekierowanie w [webiste/urls.py](../website/website/urls.py) jest takie samo jak dla reszty strony, tj. przekierowuje do [core/urls.py](../website/core/urls.py). Tam już znajdują się finalne przekierowania do [core/views.py](../website/core/views.py). W [views.py](../website/core/views.py) następuje pobranie danych z bazy za pośrednictwem modułu [core/databaseInteraction.py](../website/core/databaseInteraction.py) (oraz w przypadku wyszykiwania danego gracza w `statistics` za pomocą formularza `NameForm` znajdującego się w [core/forms.py](../website/core/forms.py)), skąd następuje zwrócenie pliku (o nazwie identyczniej jak funkcja) `html` wraz z danymi z bazy znajdujących się w folderze `templates`, przykładowo [templates/statistics.html](../website/templates/statistics.html).
 
-### Opis dla API
+### Opis API
 
 
 Bazowe przekierowanie w [webiste/urls.py](../website/website/urls.py) przekierowuje do pliku [core/urls_api.py](../website/core/urls_api.py), który przekierowuje do odpowiednich funkcji w [core/views.py](../website/core/views.py). Funkcje te (z powodu dziwnych błędów w innym przypadku) bezpośrednio pobierają dane z bazy danych oraz po przerobieniu na format `JSON` zwracają odpowiednie dane.
