@@ -13,7 +13,10 @@
   Team contribution: {{stats.5}}<br>
 
   <h4>fav vehicle</h4>
-  {{fav_vehicle.0}}
+
+  {% for row in fav_vehicle %}
+    {{row.0}} - gier: {{row.1}}
+  {% endfor %}
 
   <h4>fav map</h4>
   {{fav_map.0}}

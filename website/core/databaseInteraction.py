@@ -52,8 +52,8 @@ class DatabaseInteraction:
 			self.cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_game \
                 WHERE player_id like %s \
                 GROUP BY vehicle \
-                ORDER BY magnitude DESC LIMIT 1""", [playerId])
-			return self.cursor.fetchone()
+                ORDER BY magnitude DESC LIMIT 3""", [playerId])
+			return self.cursor.fetchall()
 		except Exception as exc:
 			print(f"Favorite vehicle databaseInt exception: {exc}")
 

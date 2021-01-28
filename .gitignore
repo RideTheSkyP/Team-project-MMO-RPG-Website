@@ -8,3 +8,4 @@ mmorpg/register/__pycache__/
 .DS_Store
 website/templates/registration/.goutputstream-DUX7W0
 website/core/migrations/
+stats-readme.html
