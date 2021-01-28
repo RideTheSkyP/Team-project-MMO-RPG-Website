@@ -173,6 +173,25 @@ def top_maps(request):
 
     return JsonResponse({"works?": "error"})
 
+def api_player(request, player_name):
+    with connection.cursor() as cursor:
+        try:
+
+            cursor.execute("""SELECT t.nick, s.player_id, s.game_id, s.player_points, s.team, s.vehicle, s.distance,  
+            	s.team_points, s.map, s.won FROM stat_player_game as s JOIN top_players as t 
+                on s.player_id = t.player_id where t.nick = %s""", [player_name])
+
+            r = [dict((cursor.description[i][0], value) \
+               for i, value in enumerate(row)) for row in cursor.fetchall()]
+
+            json_output = json.dumps(r)
+            return HttpResponse(json_output)
+
+        except Exception as e:
+            print(e)
+
+    return JsonResponse({"works?": "error"})
+
 """
 koniec API
 """

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Dokumentacja - Statystyki</title>
+        <style>
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        
+        
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="dokumentacja---statystyki">Dokumentacja - Statystyki</h1>
+<h2 id="aby-uruchomić-wyśwtelanie-statystyk-na-stronie">Aby uruchomić wyśwtelanie statystyk na stronie:</h2>
+<pre><code>uruchomienie strony wg instrukcji (w tym `python3 manage.py migrate`) 
+uruchomienie skryptu baza_staty.sql w wybranej bazie MySQL (w pierwszych linkjkach trzeba zmienic wybraną bazę)
+standardowe uruchomienie za pomocą `python3 manage.py runsslserver [port]`
+</code></pre>
+<h2 id="obsługa-api">Obsługa API:</h2>
+<p>API posiada własny link <code>[strona]/api/[zapytanie]</code>, wszystko jest zwracane w formacie JSON</p>
+<p>Dostępne zapytania:</p>
+<ul>
+<li><code>test</code> - zwraca czy API działa</li>
+<li><code>top_players_all</code> - zwraca całą tabelę <code>top_players</code> z przetworzonymi danymi</li>
+<li><code>top_maps</code> - zwraca statystyki map</li>
+<li><code>player/[player]</code> - zwraca wszystskie gry danego gracza</li>
+</ul>
+<h3 id="format-danych">format danych</h3>
+<p><code>test</code>:</p>
+<pre><code>{
+    &quot;works?&quot;: &quot;yes&quot;
+}
+</code></pre>
+<p><code>top_players_all</code>:</p>
+<pre><code>[
+    {
+        &quot;player_id&quot;: [int], &quot;Nick&quot;: [str], &quot;games_won&quot;: [int], 
+        &quot;percent_won&quot;: [int], &quot;avg_points&quot;: [double], 
+        &quot;contribution&quot;: [double]
+    }, 
+    ...
+]
+</code></pre>
+<p><code>top_maps</code>:</p>
+<pre><code>[
+    {
+        &quot;map&quot;: [str], &quot;no_of_games&quot;: [int], 
+        &quot;max_points_team&quot;: [int], &quot;avg_points&quot;: [double
+    }, 
+    ...
+]
+</code></pre>
+<p><code>player/[player]</code>:</p>
+<pre><code>[
+    {
+        &quot;nick&quot;: [str=player], &quot;player_id&quot;: [int], &quot;game_id&quot;: [int], 
+        &quot;player_points&quot;: [int], &quot;team&quot;: [str], &quot;vehicle&quot;: [str], &quot;distance&quot;: [int], 
+        &quot;team_points&quot;: [int], &quot;map&quot;: [str], &quot;won&quot;: [int]
+    }, 
+    ...
+]
+</code></pre>
+<h2 id="baza-danych">Baza danych</h2>
+<p>Tabele:</p>
+<p><img src="file:////Users/paw/GitHub/Team-project-MMO-RPG-Website/docs/docs_files/fin_diag_stats.png" alt="diagram tabel"></p>
+<p>Tabele <code>top_players</code> oraz <code>top_map</code> są automatycznie uzupełniane za pomocą procedur <code>recount_player_top</code> oraz <code>populate_top_map</code>, które są odpowiednio uzupełniane po każdym <code>insert</code> na <code>stat_player_game</code> oraz co godzinę w przypadku <code>stat_map_game</code>. Dokładne procedury znajdują się w pliku <a href="./docs_files/baza_staty.sql">baza_staty.sql</a>.</p>
+<h2 id="populacja-bazy-danych">Populacja bazy danych</h2>
+<p>Dane w bazie danych są uzupełniane przez <em>Backend-Podproces</em> po każdej zakończonej grze - jeden <code>insert</code> do <code>stat_map_game</code>, oraz dla każdego gracza do <code>stat_player_game</code></p>
+<h2 id="struktura-funkcji-plików-oraz-routing-django---strona">Struktura funkcji, plików oraz routing <code>Django</code> - strona</h2>
+<p>Bazowe przekierowanie w <a href="../website/website/urls.py">webiste/urls.py</a> jest takie samo jak dla reszty strony, tj. przekierowuje do <a href="../website/core/urls.py">core/urls.py</a>. Tam już znajdują się finalne przekierowania do <a href="../website/core/views.py">core/views.py</a>. W <a href="../website/core/views.py">views.py</a> następuje pobranie danych z bazy za pośrednictwem modułu <a href="../website/core/databaseInteraction.py">core/databaseInteraction.py</a> (oraz w przypadku wyszykiwania danego gracza w <code>statistics</code> za pomocą formularza <code>NameForm</code> znajdującego się w <a href="../website/core/forms.py">core/forms.py</a>), skąd następuje zwrócenie pliku (o nazwie identyczniej jak funkcja) <code>html</code> wraz z danymi z bazy znajdujących się w folderze <code>templates</code>, przykładowo <a href="../website/templates/statistics.html">templates/statistics.html</a>.</p>
+<h2 id="struktura-funkcji-plików-oraz-routing-django---api">Struktura funkcji, plików oraz routing <code>Django</code> - API</h2>
+<p>Bazowe przekierowanie w <a href="../website/website/urls.py">webiste/urls.py</a> przekierowuje do pliku <a href="../website/core/urls_api.py">core/urls_api.py</a>, który przekierowuje do odpowiednich funkcji w <a href="../website/core/views.py">core/views.py</a>. Funkcje te (z powodu dziwnych błędów w innym przypadku) bezpośrednio pobierają dane z bazy danych oraz po przerobieniu na format <code>JSON</code> zwracają odpowiednie dane.</p>
+
+    </body>
+    </html>
