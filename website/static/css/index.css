@@ -1,0 +1,150 @@
+body {
+  background: url("../img/alter_wallpaper.jpg");
+  background-repeat: no-repeat;
+  background-size: 1920px 1080px;
+}
+img {
+  border: 3px solid #282c34;
+}
+.top_table {
+  display: table;
+}
+.tr {
+  display: table-row;
+}
+.td {
+  display: table-cell;
+}
+.top_signup a, .top_login a {
+  color: white;
+}
+.top_signup a:hover, .top_login a:hover {
+  color: white;
+}
+.top_login {
+  border-style: solid;
+  border-color: white;
+  border-width: thin;
+  border-radius: 4px;
+  width: 70px;
+  height: 30px;
+  margin: 10px 10px auto 1300px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+.top_signup {
+  border-style: solid;
+  border-color: white;
+  border-width: thin;
+  border-radius: 4px;
+  width: 70px;
+  height: 30px;
+  margin: 10px 30px auto 0;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+.title {
+  margin: auto 10px 0 10px;
+  font-family: Moonglade;
+  font-size: 60px;
+  color: white;
+}
+.welcome h2{
+  text-align: center;
+  margin: 200px auto 10px auto;
+  font-family: Casanova;
+  font-size: 200px;
+  font-weight: 600;
+  color: white;
+}
+.welcome p{
+  text-align: center;
+  margin: 10px auto 10px auto;
+  font-family: Casanova;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+.join-us {
+  text-align: center;
+  margin: 20px auto 0 auto;
+}
+.join-button {
+  width: 200px;
+  height: 80px;
+  border-radius: 4px;
+  background-color: #609ab6;
+  border: solid white;
+  font-family: Casanova;
+  font-size: 30px;
+  color: white;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.join-button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+.join-button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.join-button:hover span {
+  padding-right: 25px;
+}
+.join-button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+@font-face {
+  font-family: 'Chopsic';
+  src: url('../fonts/Chopsic-K6Dp.ttf');
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Moonglade';
+  src: url('../fonts/MoongladeDemoBold-jOzM.ttf');
+  font-style: normal;
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Casanova';
+  src: url('../fonts/CasanovaScotia-Xm0K.ttf');
+  font-style: normal;
+  font-weight: 600;
+}
+.container-fluid {
+  height: 100vh;
+  background-color: #282c34;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container-fluid > div {
+  width: 85%;
+  min-width: 300px;
+  max-width: 500px;
+}
+.card {
+  width: 100%;
+}
+.social-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.btn a, .btn a:hover {
+  color: white;
+  text-decoration: none ;
+}
+
+

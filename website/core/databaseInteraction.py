@@ -10,7 +10,7 @@ class DatabaseInteraction:
 		try:
 			self.cursor.execute("""SELECT player_id, player_points, team, \
                 team_points, map, won, id FROM stat_player_game \
-                WHERE id = %s order by id desc limit 10""", [userId])
+                WHERE id = %s order by id desc limit 5""", [userId])
 			return self.cursor.fetchall()
 		except Exception as exc:
 			print(f"Home page databaseInt exception: {exc}")
@@ -52,8 +52,8 @@ class DatabaseInteraction:
 			self.cursor.execute("""SELECT vehicle, count(*) AS magnitude FROM stat_player_game \
                 WHERE player_id like %s \
                 GROUP BY vehicle \
-                ORDER BY magnitude DESC LIMIT 1""", [playerId])
-			return self.cursor.fetchone()
+                ORDER BY magnitude DESC LIMIT 3""", [playerId])
+			return self.cursor.fetchall()
 		except Exception as exc:
 			print(f"Favorite vehicle databaseInt exception: {exc}")
 

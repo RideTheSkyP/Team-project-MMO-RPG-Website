@@ -1,21 +1,24 @@
-{% extends 'base.html' %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css'%}"/>
+<link rel="stylesheet" href="{% static 'css/signup.css'%}"/>
 {% block content %}
   <h2>Sign up</h2>
+  <div class="container1">
   <form method="post">
+    <img src="../static/img/registration_icon.jpg">
     {% csrf_token %}
     {% for field in form %}
       <p>
-        {{ field.label_tag }}<br>
+        <div class="login-password">
+        {{ field.label_tag }}
+        </div>
         {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
         {% for error in field.errors %}
           <p style="color: red">{{ error }}</p>
         {% endfor %}
       </p>
     {% endfor %}
-    <button type="submit">Sign up</button>
+    <button class="dvs-submit1" type="submit">Sign up</button>
   </form>
+  </div>
 {% endblock %}

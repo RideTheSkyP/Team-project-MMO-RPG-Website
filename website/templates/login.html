@@ -1,35 +1,35 @@
-{% extends 'base.html' %}
-
+{% load static %}
+ <link rel="stylesheet" href="{% static 'css/login.css'%}"/>
 {% block title %} Sign in {% endblock %}
 {% block content %}
     <h2>Log in to My Site</h2>
     {% if form.errors %}
         <p style="color: red">Your username and password didn't match. Please try again.</p>
     {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% for field in form %}
-            <p>
-            {{ field.label_tag }}<br>
-            {{ field }}<br>
-            {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
-            {% endfor %}
-            {% if field.help_text %}
-                <p><small style="color: grey">{{ field.help_text }}</small></p>
-            {% endif %}
-        {% endfor %}
-        <button type="submit">Log in</button>
-        <p><a href="{% url 'signup' %}">New to My Site? Sign up</a></p>
-        <p><a href="{% url "password_reset" %}">Forgotten your password?</a></p>
-    </form>
+    <div class="container">
+        <img src="../static/img/login_icon.jpg">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            {% for field in form %}
 
-    <div class="row">
-        <div class="col-md-8 mx-auto social-container my-2 order-md-1">
-            <button class="btn btn-primary mb-2">
-                <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a>
-            </button>
-        </div>
+                <div class="login-password">
+                    {{ field.label_tag }};
+                </div>
+                {{ field }}<br>
+                {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
+                {% if field.help_text %}
+                    <p><small style="color: grey">{{ field.help_text }}</small></p>
+                {% endif %}
+            {% endfor %}
+            <button class="dvs-submit" type="submit"><span>Log in</span></button>
+            <p><a href="{% url 'signup' %}">New to My Site? Sign up</a></p>
+            <p><a href="{% url "password_reset" %}">Forgotten your password?</a></p>
+            <div class="facebook-login">
+                <a href="{% url 'social:begin' 'facebook' %}"><img src="../static/img/facebook_icon.jpg" width="5" height="5"></a>
+            </div>
+        </form>
     </div>
 {% endblock %}

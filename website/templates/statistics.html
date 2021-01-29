@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css'%}"/>
 {% block content %}
     <style>
     table
@@ -18,6 +19,7 @@
 
     tr:nth-child(even)
     {
+
         background-color: #dddddd;
     }
     </style>
@@ -32,6 +34,45 @@
             {{ form }}
             <input type="submit" value="Submit">
         </form>
+        <hr>
+        <h5>
+            <a href ="{% url 'player_stats' user.username %}">
+                {{ user.username }} - Twoje statystyki - KLIK
+            </a>
+        </h5>
+        <br>
+
+        <h5>Twoje ostatnie 5 gier:</h5>
+        {% if last_games %}
+            <table style="display: block" id="statsTable">
+                <tr>
+                    <th>Zdobyte punkty</th>
+                    <th>Twoja drużyna</th>
+                    <th>Punkty drużyny</th>
+                    <th>Mapa</th>
+                    <th>Wygrałes?</th>
+                </tr>
+                {% for row in last_games %}
+                <tr>
+                    <td>{{row.1}}</td>
+                    <td>{{row.2}}</td>
+                    <td>{{row.3}}</td>
+                    <td>{{row.4}}</td>
+                    <td>
+                        {% if row.5 == 1 %}
+                        WYGRALES
+                        {% else %}
+                        :c
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        <hr><br>
+
+        <h5>Top 10 Graczy</h5>
 
         {% if stats %}
             <table style="display: block" id="statsTable">
@@ -60,6 +101,8 @@
 
         <br>
 
+        <h5>Mapy:</h5>
+
         {% if maps %}
             <table style="display: block" id="statsTable">
                 <tr>
@@ -81,7 +124,7 @@
                 </tr>
                 {% endfor %}
             </table>
-        {% endif %}
+    {% endif %}
 
     <script>
         function toggleVisibility(id)
